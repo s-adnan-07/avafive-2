@@ -36,6 +36,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/products/tsconfig.app.json"
       }
+    },
+    "nats-client": {
+      "type": "library",
+      "root": "libs/nats-client",
+      "entryFile": "index",
+      "sourceRoot": "libs/nats-client/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/nats-client/tsconfig.lib.json"
+      }
     }
   }
 }
