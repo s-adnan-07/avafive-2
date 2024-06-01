@@ -1,0 +1,33 @@
+services:
+  api-gateway:
+    image: api-gateway:1.0.0
+    container_name: api-gateway
+    build:
+      context: ./
+      dockerfile: ./apps/api-gateway/Dockerfile
+    ports:
+      - 5000:5000
+    restart: always
+    command: yarn start:docker
+
+  users:
+    image: users-service:1.0.0
+    container_name: users-service
+    build:
+      context: ./
+      dockerfile: ./apps/users/Dockerfile
+    ports:
+      - 4000:4000
+    restart: always
+    command: yarn start:docker
+
+  products:
+    image: products-service:1.0.0
+    container_name: products-service
+    build:
+      context: ./
+      dockerfile: ./apps/products/Dockerfile
+    ports:
+      - 3000:3000
+    restart: always
+    command: yarn start:docker
