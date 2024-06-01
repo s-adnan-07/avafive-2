@@ -1,12 +1,16 @@
-import { Controller, Get } from '@nestjs/common'
+import { Controller, Get, Logger } from '@nestjs/common'
 import { UsersService } from './users.service'
+import { MessagePattern } from '@nestjs/microservices'
 
 @Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get()
-  getHello(): string {
-    return this.usersService.getHello()
+  private logger = new Logger(UsersController.name, { timestamp: true })
+
+  @MessagePattern('getUser')
+  getUser() {
+    this.logger.log('User requested')
+    return 'user'
   }
 }
