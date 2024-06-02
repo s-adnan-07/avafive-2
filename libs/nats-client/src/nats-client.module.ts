@@ -1,25 +1,37 @@
 import { Module } from '@nestjs/common'
-import { NatsClientService } from './nats-client.service'
 import { ClientsModule, Transport } from '@nestjs/microservices'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { NatsClientService } from './nats-client.service'
 
 @Module({
   imports: [
-    ClientsModule.register([
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath:
+        process.env.NODE_ENV == 'development' ? '.env.development' : '.env',
+    }),
+    ClientsModule.registerAsync([
       {
         name: 'NATS_SERVICE',
-        transport: Transport.NATS,
-        options: { servers: ['nats://nats'] },
+        inject: [ConfigService],
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.NATS,
+          options: { servers: [configService.get<string>('NATS')] },
+        }),
       },
     ]),
   ],
   providers: [NatsClientService],
   exports: [
     NatsClientService,
-    ClientsModule.register([
+    ClientsModule.registerAsync([
       {
         name: 'NATS_SERVICE',
-        transport: Transport.NATS,
-        options: { servers: ['nats://nats'] },
+        inject: [ConfigService],
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.NATS,
+          options: { servers: [configService.get<string>('NATS')] },
+        }),
       },
     ]),
   ],

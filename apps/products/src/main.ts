@@ -8,7 +8,7 @@ async function bootstrap() {
   const logger = new Logger('NestMicroservice')
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     ProductsModule,
-    { transport: Transport.NATS, options: { servers: ['nats://nats'] } }
+    { transport: Transport.NATS, options: { servers: [process.env['NATS']] } }
   )
   const configService = app.get<ConfigService>(ConfigService)
   const NODE_ENV = configService.get<string>('NODE_ENV')

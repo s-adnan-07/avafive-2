@@ -5,7 +5,14 @@ import { NatsClientModule } from '@app/nats-client'
 import { ConfigModule } from '@nestjs/config'
 
 @Module({
-  imports: [NatsClientModule, ConfigModule.forRoot({ isGlobal: true })],
+  imports: [
+    NatsClientModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath:
+        process.env.NODE_ENV == 'development' ? '.env.development' : '.env',
+    }),
+  ],
   controllers: [UsersController],
   providers: [UsersService],
 })
