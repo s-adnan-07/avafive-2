@@ -1,6 +1,7 @@
 import { Controller, Get, Logger } from '@nestjs/common'
 import { UsersService } from './users.service'
-import { MessagePattern } from '@nestjs/microservices'
+import { MessagePattern, Payload } from '@nestjs/microservices'
+import { CreateUserDto } from '@app/shared'
 
 @Controller()
 export class UsersController {
@@ -12,5 +13,14 @@ export class UsersController {
   getUser() {
     this.logger.log('User requested')
     return 'user'
+  }
+
+  @MessagePattern('createUser')
+  createUser(@Payload() createUserDto: CreateUserDto) {
+    this.logger.log('User requested')
+    // this.logger.log(createUserDto)
+    // return createUserDto
+    // return 'user'
+    return this.usersService.createUser(createUserDto)
   }
 }

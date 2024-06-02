@@ -3,6 +3,7 @@ import { SharedService } from '../services/shared.service'
 import { PostgresModule } from './postgres.module'
 import { ConfigModule } from '@nestjs/config'
 import { NatsClientModule } from './nats-client.module'
+import { UserEntity } from '../entities/user.entity'
 
 @Module({
   imports: [

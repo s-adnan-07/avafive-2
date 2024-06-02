@@ -1,7 +1,8 @@
 import { lastValueFrom } from 'rxjs'
-import { Controller, Get, Inject } from '@nestjs/common'
+import { Body, Controller, Get, Inject, Post } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
 import { AppService } from './app.service'
+import { CreateUserDto } from '@app/shared'
 
 @Controller()
 export class AppController {
@@ -23,5 +24,10 @@ export class AppController {
   @Get('products')
   getProducts() {
     return lastValueFrom(this.natsClient.send('getProduct', {}))
+  }
+
+  @Post('users')
+  createUser(@Body() createUserDto: CreateUserDto) {
+    return this.natsClient.send('createUser', createUserDto)
   }
 }
