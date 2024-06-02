@@ -19,7 +19,9 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@app/nats-client": ["libs/nats-client/src"],
-      "@app/nats-client/*": ["libs/nats-client/src/*"]
+      "@app/nats-client/*": ["libs/nats-client/src/*"],
+      "@app/shared": ["libs/shared/src"],
+      "@app/shared/*": ["libs/shared/src/*"]
     }
   },
   "watchOptions": {

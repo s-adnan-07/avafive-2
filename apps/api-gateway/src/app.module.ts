@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common'
-import { NatsClientModule } from '@app/nats-client'
+import { NatsClientModule, SharedModule } from '@app/shared'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 
 @Module({
-  imports: [NatsClientModule],
+  imports: [NatsClientModule, SharedModule],
   controllers: [AppController],
   providers: [AppService],
 })
