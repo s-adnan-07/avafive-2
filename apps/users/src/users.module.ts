@@ -1,18 +1,10 @@
 import { Module } from '@nestjs/common'
+import { NatsClientModule } from '@app/nats-client'
 import { UsersController } from './users.controller'
 import { UsersService } from './users.service'
-import { NatsClientModule } from '@app/nats-client'
-import { ConfigModule } from '@nestjs/config'
 
 @Module({
-  imports: [
-    NatsClientModule,
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath:
-        process.env.NODE_ENV == 'development' ? '.env.development' : '.env',
-    }),
-  ],
+  imports: [NatsClientModule],
   controllers: [UsersController],
   providers: [UsersService],
 })

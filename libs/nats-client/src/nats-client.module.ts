@@ -22,18 +22,6 @@ import { NatsClientService } from './nats-client.service'
     ]),
   ],
   providers: [NatsClientService],
-  exports: [
-    NatsClientService,
-    ClientsModule.registerAsync([
-      {
-        name: 'NATS_SERVICE',
-        inject: [ConfigService],
-        useFactory: async (configService: ConfigService) => ({
-          transport: Transport.NATS,
-          options: { servers: [configService.get<string>('NATS')] },
-        }),
-      },
-    ]),
-  ],
+  exports: [NatsClientService, ClientsModule],
 })
 export class NatsClientModule {}
