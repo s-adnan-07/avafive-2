@@ -1,7 +1,8 @@
-import { Controller, Get, Logger } from '@nestjs/common'
-import { UsersService } from './users.service'
+import { Controller, Logger, UseFilters } from '@nestjs/common'
 import { MessagePattern, Payload } from '@nestjs/microservices'
 import { CreateUserDto } from '@app/shared'
+import { UsersService } from './users.service'
+import { UsersExceptionFilter } from './users-exception.filter'
 
 @Controller()
 export class UsersController {
@@ -9,18 +10,15 @@ export class UsersController {
 
   private logger = new Logger(UsersController.name, { timestamp: true })
 
-  @MessagePattern('getUser')
-  getUser() {
-    this.logger.log('User requested')
-    return 'user'
+  @MessagePattern({ cmd: 'getUser' })
+  getUser(@Payload() email: string) {
+    return this.usersService.getUser(email)
   }
 
-  @MessagePattern('createUser')
+  // Exception Filters can be used only in controllers
+  @MessagePattern({ cmd: 'createUser' })
+  @UseFilters(UsersExceptionFilter)
   createUser(@Payload() createUserDto: CreateUserDto) {
-    this.logger.log('User requested')
-    // this.logger.log(createUserDto)
-    // return createUserDto
-    // return 'user'
     return this.usersService.createUser(createUserDto)
   }
 }

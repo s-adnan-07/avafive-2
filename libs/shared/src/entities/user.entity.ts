@@ -16,4 +16,8 @@ export class UserEntity {
 
   @Column({ default: 'local' })
   role: string
+
+  // False until user confirms email address
+  @Column({ default: false })
+  verified: boolean
 }
