@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { ProductEntity } from './product.entity'
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -20,4 +21,7 @@ export class UserEntity {
   // False until user confirms email address
   @Column({ default: false })
   verified: boolean
+
+  @OneToMany(() => ProductEntity, product => product.user)
+  products: ProductEntity[]
 }
