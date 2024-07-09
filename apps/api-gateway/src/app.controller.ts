@@ -21,10 +21,10 @@ export class AppController {
     return lastValueFrom(this.natsClient.send('getUser', {}))
   }
 
-  @Get('products')
-  getProducts() {
-    return lastValueFrom(this.natsClient.send('getProduct', {}))
-  }
+  // @Get('products')
+  // getProducts() {
+  //   return lastValueFrom(this.natsClient.send('getProduct', {}))
+  // }
 
   @Post('users')
   createUser(@Body() createUserDto: CreateUserDto) {
