@@ -1,4 +1,4 @@
-import { CreateUserDto, LoginDetailsDto, User } from '@app/shared'
+import { CreateUserDto, LoginDetailsDto, User, UserToken } from '@app/shared'
 import {
   ForbiddenException,
   Inject,
@@ -8,10 +8,14 @@ import {
 import { ClientProxy, RpcException } from '@nestjs/microservices'
 import { lastValueFrom } from 'rxjs'
 import * as bcrypt from 'bcrypt'
+import { JwtService } from '@nestjs/jwt'
 
 @Injectable()
 export class AuthService {
-  constructor(@Inject('NATS_SERVICE') private natsClient: ClientProxy) {}
+  constructor(
+    @Inject('NATS_SERVICE') private natsClient: ClientProxy,
+    private jwtService: JwtService
+  ) {}
 
   async login({ email, password }: LoginDetailsDto) {
     const user = await lastValueFrom(
@@ -22,11 +26,12 @@ export class AuthService {
     const passwordsMatch = await this.comparePasswords(password, user.password)
 
     if (!passwordsMatch) throw new UnauthorizedException()
-    const { password: userPass, id, role, ...hydratedUser } = user
+    const { password: userPass, products, ...hydratedUser } = user
+    const { name } = user
 
-    // TODO: Generate jwt with name, email and role as payload here
+    const token = await this.jwtService.signAsync(hydratedUser)
 
-    return hydratedUser
+    return { name, token }
   }
 
   comparePasswords(password = '', hash = '') {
@@ -51,5 +56,9 @@ export class AuthService {
     }
 
     return { message: 'User Created Successfully' }
+  }
+
+  decode(token: string): UserToken {
+    return this.jwtService.decode<UserToken>(token)
   }
 }
