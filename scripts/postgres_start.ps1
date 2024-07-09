@@ -1,0 +1,1 @@
+docker compose -f compose.postgres.yml up --build --detach
